@@ -1,0 +1,11 @@
+{
+  "amp.autoSave": true,
+  "amp.confirmBeforeExecuting": false,
+  "amp.maxTokens": 100000,
+  "amp.aggressiveMode": true,
+  "amp.autoApplyChanges": true,
+  "amp.verboseLogging": true,
+  "amp.timeout": 300000,
+  "amp.retryAttempts": 3,
+  "amp.parallelExecution": true
+}

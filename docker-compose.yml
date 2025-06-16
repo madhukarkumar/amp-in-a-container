@@ -1,0 +1,24 @@
+services:
+  amp-cli:
+    build: .
+    container_name: amp-dev
+    environment:
+      - AMP_API_KEY=${AMP_API_KEY}
+      - GIT_USER_NAME=${GIT_USER_NAME:-"Amp User"}
+      - GIT_USER_EMAIL=${GIT_USER_EMAIL:-"user@example.com"}
+      - GIT_REPO=${GIT_REPO}
+      - AMP_AUTO_APPLY=true
+      - AMP_SKIP_CONFIRMATIONS=true
+      - AMP_AGGRESSIVE_MODE=true
+    volumes:
+      - ./workspace:/workspace
+      - ./config:/home/ampuser/.config/amp
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    networks:
+      - amp-network
+
+networks:
+  amp-network:
+    driver: bridge
