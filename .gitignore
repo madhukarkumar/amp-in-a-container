@@ -2,6 +2,13 @@
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
+.env.test
+
+# Ensure no accidental commits of environment files
+*.env
+!.env.example
 
 # Docker volumes and data
 workspace/
