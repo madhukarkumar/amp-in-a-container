@@ -7,7 +7,7 @@ set -e
 
 # Configuration
 CONTAINER_PREFIX="amp-dev"
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SESSION_NAME="amp-multi"
 
 # Ask user for number of containers
@@ -173,12 +173,12 @@ echo "   Ctrl+b + x           - Kill current pane"
 echo "   Ctrl+b + &           - Kill entire session"
 echo ""
 echo "💡 Usage in each pane:"
-echo "   echo  \"Review this code for improvements\" | amp
-echo "   echo  \"Add comprehensive tests\" | amp
-echo "   echo  \"Optimize performance\" | amp
+echo "   echo \"Review this code for improvements\" | amp"
+echo "   echo \"Add comprehensive tests\" | amp"
+echo "   echo \"Optimize performance\" | amp"
 echo ""
 echo "🔌 To reconnect later: tmux attach -t $SESSION_NAME"
-echo "🛑 To stop all: ./stop-multi-amp.sh"
+echo "🛑 To stop all: ./scripts/startup/stop-multi-amp-tmux.sh"
 echo ""
 
 # Wait a moment for containers to start

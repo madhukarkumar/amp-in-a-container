@@ -8,7 +8,7 @@ set -e
 # Configuration
 CONTAINER_PREFIX="amp-dev"
 NUM_INSTANCES=3
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 echo "🚀 Starting $NUM_INSTANCES Amp container instances..."
 echo "📁 Project directory: $PROJECT_DIR"

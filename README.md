@@ -16,6 +16,10 @@ A complete containerized development environment with Amp CLI and essential deve
 3. **Build and run**:
    ```bash
    docker-compose build
+   # Quick start - single instance
+   ./scripts/startup/run-single-amp.sh
+   
+   # Or manually
    docker-compose run --rm amp-cli bash
    ```
 
@@ -26,7 +30,18 @@ amp-container-dev/
 ├── config/
 │   └── amp-settings.json          # Amp CLI configuration
 ├── scripts/
-│   └── entrypoint.sh             # Container initialization script
+│   ├── startup/                    # Host-side startup scripts
+│   │   ├── run-single-amp.sh      # Quick single instance launcher
+│   │   ├── run-multi-amp.sh       # Multiple instances in separate terminals
+│   │   ├── run-single-amp-tmux.sh # Single instance with tmux
+│   │   ├── run-multi-amp-tmux.sh  # Multiple instances in tmux panes
+│   │   ├── run-batch-prompts-tmux.sh # Automated batch processing
+│   │   ├── stop-multi-amp.sh      # Stop multiple instances
+│   │   └── stop-multi-amp-tmux.sh # Stop tmux sessions
+│   ├── entrypoint.sh             # Container initialization script
+│   ├── amp-prompt.sh             # File-based prompt execution
+│   ├── batch-prompts.sh          # Process multiple prompt files
+│   └── colored-bash.sh           # Multi-instance colored terminals
 ├── workspace/                     # Your project files go here
 ├── .env                          # Environment variables
 ├── docker-compose.yml            # Container orchestration
@@ -59,7 +74,16 @@ Environment variables for customization:
 
 ### Interactive Development
 ```bash
-# Start interactive shell
+# Quick start - single instance
+./scripts/startup/run-single-amp.sh
+
+# Multiple instances in tmux panes
+./scripts/startup/run-multi-amp-tmux.sh
+
+# Automated batch processing
+./scripts/startup/run-batch-prompts-tmux.sh 3
+
+# Manual start
 docker-compose run --rm amp-cli bash
 
 # Inside container:
@@ -144,6 +168,72 @@ echo "Optimize database queries" | amp
 echo "Fix memory leaks in this application" | amp
 echo "Resolve dependency conflicts" | amp
 ```
+
+## Startup Scripts
+
+**Host-side launcher scripts** (in `scripts/startup/`):
+
+1. **`run-single-amp.sh`** - Quick launcher for single Amp instance
+   ```bash
+   ./scripts/startup/run-single-amp.sh
+   ```
+
+2. **`run-multi-amp.sh`** - Launch multiple instances in separate terminal windows
+   ```bash
+   ./scripts/startup/run-multi-amp.sh  # Creates 3 terminal windows
+   ```
+
+3. **`run-single-amp-tmux.sh`** - Single instance with tmux session management
+   ```bash
+   ./scripts/startup/run-single-amp-tmux.sh
+   ```
+
+4. **`run-multi-amp-tmux.sh`** - Multiple instances in tmux panes with colored backgrounds
+   ```bash
+   ./scripts/startup/run-multi-amp-tmux.sh  # Interactive: choose 1-10 instances
+   ```
+
+5. **`run-batch-prompts-tmux.sh`** - Automated batch processing with numbered prompts
+   ```bash
+   ./scripts/startup/run-batch-prompts-tmux.sh [num_instances]
+   # Runs: amp < promptN.txt > outputN.txt in each container
+   ```
+
+6. **`stop-multi-amp.sh`** - Stop all running Amp containers
+   ```bash
+   ./scripts/startup/stop-multi-amp.sh
+   ```
+
+7. **`stop-multi-amp-tmux.sh`** - Stop tmux sessions
+   ```bash
+   ./scripts/startup/stop-multi-amp-tmux.sh
+   ```
+
+## Container Utility Scripts
+
+**Built into containers** (in `scripts/`):
+
+1. **`entrypoint.sh`** - Container initialization: Git setup, repo cloning, Amp authentication
+2. **`amp-prompt.sh`** → `/usr/local/bin/amp-prompt` - Run Amp with file-based prompts: `amp-prompt /workspace/my-prompt.txt`
+3. **`batch-prompts.sh`** → `/usr/local/bin/batch-prompts` - Process multiple prompt files from a directory sequentially
+4. **`colored-bash.sh`** → `/usr/local/bin/colored-bash` - Multi-instance support with colored terminal backgrounds
+
+## Build & Run Flow
+
+**Build Process:**
+1. `docker-compose build` → Uses Dockerfile
+2. Installs Node.js 20 + dev tools (Git, Docker CLI, Python, build tools)
+3. Installs Amp CLI + TypeScript/ESLint/Prettier/Jest globally
+4. Creates `ampuser` (UID 1001) for security
+5. Copies all scripts to `/usr/local/bin/` and makes executable
+6. Sets up config directory and entrypoint
+
+**Run Process:**
+1. `docker-compose run --rm amp-cli bash` → Starts container
+2. Executes entrypoint.sh: Auto-clones `$GIT_REPO`, configures Git user, sets Amp API key
+3. Mounts `./workspace` → `/workspace` (persistent files)
+4. Mounts `./config` → `/home/ampuser/.config/amp` (Amp settings)
+5. Launches bash shell in `/workspace` with all tools available
 
 ## Pre-installed Tools
 

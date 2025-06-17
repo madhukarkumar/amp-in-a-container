@@ -5,7 +5,7 @@
 
 set -e
 
-PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SESSION_NAME="amp-single"
 
 echo "🚀 Starting single Amp container in tmux..."
